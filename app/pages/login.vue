@@ -21,12 +21,6 @@
 </template>
   
 <script setup lang="ts">
-  definePageMeta({
-      middleware: [
-          'auth',
-      ]
-  });
-  
   const supabase = useSupabaseClient();
   const login = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
