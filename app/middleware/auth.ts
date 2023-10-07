@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             // nein: /login
 
     if (to.path === '/login' && user.value) {
-        return navigateTo('/');
+        return navigateTo('/notfound');
     }
 
     if (to.path !== '/login' && !user.value) {
