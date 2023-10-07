@@ -1,5 +1,6 @@
 # Build
 FROM oven/bun:1.0.4-slim as build
+ENV NODE_ENV=production
 WORKDIR /app
 COPY package.json .
 COPY bun.lockb .
