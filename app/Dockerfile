@@ -1,19 +1,8 @@
-# Build
-FROM oven/bun:1.0.4-slim as build
-ENV NODE_ENV=production
+FROM node:16.19.1
 WORKDIR /app
-COPY package.json .
-COPY bun.lockb .
-RUN bun install
-
+COPY package*.json ./
+RUN npm install
 COPY . .
-RUN bun run build
-
-# Run
-FROM node:20.8.0-slim
-WORKDIR /app
-ENV PORT=3000
-COPY --from=build /app/.output /app/.output
-# Optional, only needed if you rely on unbundled dependencies
-# COPY --from=build /src/node_modules /src/node_modules
-CMD [ "node", ".output/server/index.mjs" ]
+EXPOSE 3000
+RUN npm run build
+CMD [ "npm", "run", "start" ]
