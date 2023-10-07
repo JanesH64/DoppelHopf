@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>Doppelhopf</h1>
-      <button v-on:click="login()">Test</button>
+      <button class="btn" v-on:click="login()">Test</button>
     </div>
   </template>
   
