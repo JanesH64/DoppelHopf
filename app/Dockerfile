@@ -10,7 +10,7 @@ COPY . .
 RUN bun run build
 
 # Run
-FROM node:18.18.0-slim
+FROM node:20.8.0-slim
 WORKDIR /app
 ENV PORT=3000
 COPY --from=build /app/.output /app/.output
