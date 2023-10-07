@@ -21,15 +21,21 @@
 </template>
   
 <script setup lang="ts">
-const supabase = useSupabaseClient();
-const login = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+  definePageMeta({
+      middleware: [
+          'auth',
+      ]
   });
+  
+  const supabase = useSupabaseClient();
+  const login = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
 
-  if (error) {
-    console.error(error);
-  }
-};
+    if (error) {
+      console.error(error);
+    }
+  };
 </script>
   

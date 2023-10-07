@@ -1,3 +1,11 @@
 <template>
-    <h1>Weclome to Doppelhopf</h1>
+    <h1>Welcome!</h1>
 </template>
+
+<script setup lang="ts">
+    definePageMeta({
+        middleware: [
+            'auth',
+        ]
+    });
+</script>

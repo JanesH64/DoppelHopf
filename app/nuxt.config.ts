@@ -5,6 +5,13 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@vite-pwa/nuxt'
   ],
+  supabase: {
+    redirectOptions: {
+      login: '/login',
+      callback: '/confirm',
+      exclude: ['/', '/login', '/confirm'],
+    }
+  },
   css: ['~/assets/css/tailwind.css'],
   postcss: {
     plugins: {
