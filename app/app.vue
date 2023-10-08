@@ -11,12 +11,12 @@ const router = useRouter();
 onMounted(() => {
     supabase.auth.onAuthStateChange((event, session) => {
         if (router.currentRoute.value.path === '/login' && session !== null) {
-            router.push('/');
+            navigateTo('/');
             return;
         }
 
         if (router.currentRoute.value.path !== '/login' && session === null) {
-            router.push('/login');
+            navigateTo('/login');
         }
     });
 });
