@@ -1,5 +1,5 @@
 <template>
-  <div class="hero h-full flex items-start pt-24">
+  <div class="hero h-full flex items-start justify-center pt-24">
     <div class="hero-content text-center">
       <div class="flex flex-col items-center">
         <img src="/icon.png" class="h-2/5 w-2/5 m-6" alt="">
@@ -21,6 +21,9 @@
 </template>
   
 <script setup lang="ts">
+  definePageMeta({
+    layout: "login",
+  });
   const supabase = useSupabaseClient();
   const login = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
