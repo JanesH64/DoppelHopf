@@ -4,7 +4,6 @@
         <div class="drawer">
             <input id="main-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content">
-                <!-- Page content here -->
                 <div class="navbar bg-base-100 pt-safe-top fixed top-0">
                     <div class="flex-none">
                         <label for="main-drawer" class="btn btn-square btn-ghost">
@@ -35,7 +34,7 @@
                     <slot />
                 </div>
             </div>
-            <div class="drawer-side">
+            <div class="drawer-side z-10">
                 <label for="main-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                 <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
                     <h2 class="p-4 text-xl">Doppelhopf</h2>

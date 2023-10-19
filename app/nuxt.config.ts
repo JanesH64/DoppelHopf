@@ -3,7 +3,9 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
     '@nuxtjs/supabase',
-    '@vite-pwa/nuxt'
+    '@vite-pwa/nuxt',
+    'nuxt-mdi',
+    '@vueuse/nuxt',
   ],
   supabase: {
     redirectOptions: {

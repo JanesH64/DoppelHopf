@@ -1,7 +1,5 @@
 <template>
     <div class="h-full w-full flex flex-col items-center">
-        <div class='w-[30rem] h-[30rem] rounded-full absolute -top-[250px] -z-[1] bg-gradient-to-bl from-neutral-900 via-black to-current'></div>
-        <h1 class="text-4xl mb-8 mt-8">{{ userData?.full_name }}</h1>
         <div class="avatar mb-4">
             <div class="w-24 rounded-full ring ring-secondary ring-offset-base-100 ring-offset-2">
                 <img :src="userData?.picture" class="h-36 w-36" referrerpolicy="no-referrer" />
