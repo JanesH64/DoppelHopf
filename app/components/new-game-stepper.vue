@@ -13,6 +13,6 @@
         if(!props?.stepIndex) {
             return false;
         }
-        return this.props.stepIndex >= stepIndex
+        return props?.stepIndex >= stepIndex
     }
 </script>
