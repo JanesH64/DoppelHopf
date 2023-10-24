@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-const stepIndex = ref(0);
+let stepIndex = ref(0);
 
 let game = ref({
     name: '',

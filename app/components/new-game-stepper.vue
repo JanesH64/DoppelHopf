@@ -10,6 +10,9 @@
     const props = defineProps(['stepIndex']);
 
     function isStepActive(stepIndex: number): boolean {
+        if(!props?.stepIndex) {
+            return false;
+        }
         return this.props.stepIndex >= stepIndex
     }
 </script>
