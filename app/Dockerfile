@@ -17,7 +17,8 @@ RUN npm ci && npm cache clean --force
 # copy over all files to the work directory
 ADD . /app
 
-RUN prisma generate
+RUN npm i -g prisma
+RUN npx prisma generate
 
 # build the project
 RUN npm run build
