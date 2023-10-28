@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Profile {
+  id             String    @id @unique @db.Uuid
+  updated_at     DateTime? @db.Timestamptz(6)
+  email          String?   @unique
+  email_verified Boolean?
+  full_name      String?
+  avatar_url     String?
+  games          PlayersOnGames[]
+  player_values  PlayerValues[] 
+}
+
+model Game {
+  id         String    @id @unique @db.Uuid
+  name       String
+  updated_at DateTime? @db.Timestamptz(6)
+  players    PlayersOnGames[]
+  rounds      Round[]
+}
+
+model PlayersOnGames {
+  profile Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String @db.Uuid
+  game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  game_id String @db.Uuid
+
+  @@id([profile_id, game_id])
+}
+
+model Round {
+  id         String    @id @unique @db.Uuid
+  updated_at DateTime? @db.Timestamptz(6)
+  game       Game      @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  game_id    String    @db.Uuid
+  player_values PlayerValues[]
+}
+
+model PlayerValues {
+  id         String    @id @unique @db.Uuid
+  updated_at DateTime? @db.Timestamptz(6)
+  round      Round     @relation(fields: [round_id], references: [id], onDelete: Cascade)
+  round_id   String    @db.Uuid
+  player     Profile   @relation(fields: [player_id], references: [id], onDelete: Cascade)
+  player_id  String    @db.Uuid
+  value      Int
+}

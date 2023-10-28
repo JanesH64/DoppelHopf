@@ -44,10 +44,10 @@ import { MdiIcon } from '#build/components';
                             <div class="flex flex-row items-center justify-start gap-x-2">
                                 <div class="avatar">
                                     <div class="w-8 h-8 rounded-full">
-                                        <img :src="player.avatarUrl" referrerpolicy="no-referrer" />
+                                        <img :src="player.avatar_url" referrerpolicy="no-referrer" />
                                     </div>
                                 </div>
-                                {{ player.name }}
+                                {{ player.full_name }}
                             </div>
                         </td>
                         <th>
@@ -64,9 +64,9 @@ import { MdiIcon } from '#build/components';
         <div class="flex flex-row gap-x-4 pt-4 justify-center px-5">
             <select class="select select-bordered w-full max-w-xs" v-model="selectedPlayer">
                 <option disabled value="">Please select a player</option>
-                <option v-for="player in availablePlayers()" :value="player">{{ player.name }}</option>
+                <option v-for="player in availablePlayers()" :value="player">{{ player.full_name }}</option>
             </select>
-            <button class="btn btn-circle" v-on:click="addPlayer(selectedPlayer)">
+            <button class="btn btn-circle" v-on:click="addPlayer(selectedPlayer)" :disabled="!selectedPlayer">
                 <MdiIcon icon="mdiPlus" />
             </button>
         </div>
@@ -80,35 +80,38 @@ import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 let props = defineProps(['modelValue'])
 defineEmits(['update:modelValue'])
 
-let players = ref([
+const { data: profiles } = await useFetch('/api/players');
+let players = ref(profiles);
+
+let x = ref([
     {
         "id": "0",
-        "name": "Janes Horst",
-        "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
+        "full_name": "Janes Horst",
+        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
         "position": 1
     },
     {
         "id": "1",
-        "name": "Yannik Horst",
-        "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
+        "full_name": "Yannik Horst",
+        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
         "position": 2
     },
     {
         "id": "2",
-        "name": "Tim Lüdiger",
-        "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
+        "full_name": "Tim Lüdiger",
+        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
         "position": 2
     },
     {
         "id": "3",
-        "name": "Leonard Demes",
-        "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
+        "full_name": "Leonard Demes",
+        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
         "position": 2
     },
     {
         "id": "4",
-        "name": "Bastian Gödde",
-        "avatarUrl": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
+        "full_name": "Bastian Gödde",
+        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
         "position": 2
     }
 ]);
@@ -116,23 +119,24 @@ let players = ref([
 let selectedPlayer = ref(null);
 
 const sortableTable = ref<HTMLElement | null>(null);
-useSortable(sortableTable, players, {
+useSortable(sortableTable, props.modelValue, {
     animation: 200,
     handle: '.handle',
-    onUpdate: (e) => {
+    onUpdate: (e: any) => {
         moveArrayElement(props.modelValue, e.oldIndex, e.newIndex);
     },
 });
 
-function removePlayer(index: any): void {
+function removePlayer(index: any) {
     props.modelValue.splice(index, 1);
 }
 
-function addPlayer(player: any): void {
+function addPlayer(player: any) {
     props.modelValue.push(player);
+    selectedPlayer.value = null;
 }
 
-function availablePlayers(): any[] {
-    return players.value.filter((player) => !props.modelValue?.includes(player));
+function availablePlayers() {
+    return players?.value?.filter((player) => !props.modelValue?.includes(player)) ?? [];
 }
 </script>
