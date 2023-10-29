@@ -14,14 +14,21 @@
         <div v-if="stepIndex === 1" class="w-full">
             <SelectPlayers v-model="game.players" />
         </div>
+
+        <div v-if="stepIndex === 2">
+            <div class="radial-progress" :style="{ '--value': progress, '--size': '12rem', '--thickness': '8px', }">{{
+                progress
+            }}%</div>
+        </div>
     </div>
 
     <div class='fixed bottom-12 flex justify-end w-full px-8 gap-x-2'>
-        <button class='tracking-wide btn w-28' v-on:click="previous()" :disabled="!canGoBack()">Back</button>
+        <button class='tracking-wide btn w-28' v-on:click="previous()" :disabled="!canGoBack()"
+            v-if="stepIndex !== 2">Back</button>
         <button class='tracking-wide btn w-28' v-on:click="next()" v-if="stepIndex === 0"
             :disabled="!canContinue()">Continue</button>
         <button class='tracking-wide btn w-28' v-on:click="createGame()" v-if="stepIndex === 1"
-            :disabled="!canCreate()" >Create</button>
+            :disabled="!canCreate()">Create</button>
     </div>
 </template>
 
@@ -62,12 +69,25 @@ function canGoBack(): boolean {
 };
 
 function canCreate(): boolean {
-    // return game.value.players?.length >= 4;
     return true;
 };
 
+let progress = ref(0);
+function progressAnimation(): void {
+    let intervalID = setInterval(() => {
+        if (progress.value === 100) {
+            clearInterval(intervalID);
+        } else {
+            progress.value++;
+        }
+    }, 10); //this sets the speed of the animation
+
+};
+
 async function createGame() {
-    useFetch('/api/games', {
+    stepIndex.value = 2;
+    progressAnimation();
+    const {data} = await useFetch('/api/games', {
         method: 'POST',
         body: JSON.stringify(game.value),
     });
