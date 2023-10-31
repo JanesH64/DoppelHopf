@@ -1,33 +1,32 @@
-import { PlayersOnGames, PrismaClient, Round } from '@prisma/client';
+import { PrismaClient, Round } from '@prisma/client';
 import {v4 as uuidv4} from 'uuid';
-import { serverSupabaseUser } from '#supabase/server';
-import {
-    readBody,
-  } from 'h3';
+import { serverSupabaseClient } from '#supabase/server';
 
 const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
-    const user = await serverSupabaseUser(event);
-    if(!user) { 
+    const client = await serverSupabaseClient(event);
+    const {data: user, error} = await client.auth.getUser();
+    if(!user?.user || error) { 
+        console.log(error);
         return {status: 401};
     }
 
     switch(event.node.req.method) {
         case 'GET': { 
-            const id = event?.context?.params?.slug;
+            const id = event?.context?.params?.id;
             if(!id) {
                 return {status: 400};
             }
 
-            return await getGame(id, user.id);
+            return await getGame(id, user.user.id);
         }
         case 'DELETE': {
-            const id = event?.context?.params?.slug;
+            const id = event?.context?.params?.id;
             if(!id) {
                 return {status: 400};
             }
 
-            await deleteGame(id);
+            await deleteGame(id, user.user.id);
             return {status: 200};
         }
     }
@@ -77,12 +76,23 @@ async function updateGame(id: string, round: Round) {
     });
 }
 
-async function deleteGame(id: string) {
-    await prisma.game.delete({
+async function deleteGame(id: string, userId: string) {
+    const result = await prisma.playersOnGames.delete({
         where: {
-            id: id
+            profile_id_game_id: {
+                game_id: id,
+                profile_id: userId
+            }
         }
     });
+
+    await prisma.game.delete(
+        {
+            where: {
+                id: id
+            }
+        }
+    );
 }
 
 function getPlayerValuesModel(players: Round) {

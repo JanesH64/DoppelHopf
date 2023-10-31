@@ -24,7 +24,7 @@ model Game {
   name       String
   updated_at DateTime? @db.Timestamptz(6)
   players    PlayersOnGames[]
-  rounds      Round[]
+  rounds     Round[]
 }
 
 model PlayersOnGames {
