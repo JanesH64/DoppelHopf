@@ -16,9 +16,7 @@
         </div>
 
         <div v-if="stepIndex === 2">
-            <div class="radial-progress" :style="{ '--value': progress, '--size': '12rem', '--thickness': '8px', }">{{
-                progress
-            }}%</div>
+            <div class="loading loading-spinner"></div>
         </div>
     </div>
 
@@ -33,6 +31,8 @@
 </template>
 
 <script setup lang="ts">
+import players from '~/server/api/players';
+
 let stepIndex = ref(0);
 
 let game = ref({
@@ -69,27 +69,22 @@ function canGoBack(): boolean {
 };
 
 function canCreate(): boolean {
-    return true;
+    return game.value.players.length >= 4;
 };
 
-let progress = ref(0);
-function progressAnimation(): void {
-    let intervalID = setInterval(() => {
-        if (progress.value === 100) {
-            clearInterval(intervalID);
-        } else {
-            progress.value++;
-        }
-    }, 10); //this sets the speed of the animation
-
+function onGameCreated(id: string | null): void {
+    if (id) {
+        navigateTo(`/games/${id}`);
+    }
 };
 
 async function createGame() {
     stepIndex.value = 2;
-    progressAnimation();
-    const {data} = await useFetch('/api/games', {
+    const {data: id} = await useFetch<string>('/api/games', {
         method: 'POST',
         body: JSON.stringify(game.value),
     });
+
+    onGameCreated(id.value);
 }
 </script>

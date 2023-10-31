@@ -1,7 +1,7 @@
 <template>
-    <div class="flex items-center w-full flex-col">
+    <div class="flex items-center w-full flex-col max-h-[90vh] overflow-y-scroll">
         <h1 class="text-3xl font-bold uppercase my-4">Games</h1>
-        <div v-if="!pending" class="flex items-center w-full justify-center flex-col h-full gap-y-4">
+        <div v-if="!pending" class="flex items-center w-full justify-center flex-col gap-y-4">
             <div class="card card-compact bg-neutral text-neutral-content shadow-xl w-full" v-for="game in games">
                 <div class="card-body">
                     <h2 class="card-title">
@@ -9,7 +9,7 @@
                     </h2>
                     <div class="flex flex-row items-center gap-x-2">
                         <span class="font-bold">Players:</span>
-                        <div class="avatar-group -space-x-6">
+                        <div class="avatar-group -space-x-4">
                             <div class="avatar" v-for="player in game.players">
                                 <div class="w-8">
                                     <img :src="player?.profile?.avatar_url" referrerpolicy="no-referrer" />
@@ -29,8 +29,8 @@
                 </div>
             </div>
         </div>
-        <div v-if="pending">
-            <span class="loading loading-ring loading-lg text-primary"></span>
+        <div v-if="pending" class="h-full flex items-center justify-center">
+            <span class="loading loading-spinner"></span>
         </div>
     </div>
 </template>
