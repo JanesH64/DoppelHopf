@@ -9,7 +9,10 @@ import { MdiIcon } from '#build/components';
 
 <template>
     <div class="overflow-x-auto overflow-y-scroll flex flex-col justify-center w-full">
-        <div class="max-h-80 overflow-y-scroll">
+        <div v-if="loading" class="h-full flex items-center justify-center">
+            <span class="loading loading-spinner"></span>
+        </div>
+        <div v-if="!loading" class="max-h-80 overflow-y-scroll">
             <table class="table w-full">
                 <!-- head -->
                 <thead>
@@ -80,43 +83,13 @@ import { useSortable, moveArrayElement } from '@vueuse/integrations/useSortable'
 let props = defineProps(['modelValue'])
 defineEmits(['update:modelValue'])
 
+let loading = ref(true);
+
 const { data: profiles } = await useFetch('/api/players');
 let players = ref(profiles);
-
-let x = ref([
-    {
-        "id": "0",
-        "full_name": "Janes Horst",
-        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
-        "position": 1
-    },
-    {
-        "id": "1",
-        "full_name": "Yannik Horst",
-        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
-        "position": 2
-    },
-    {
-        "id": "2",
-        "full_name": "Tim Lüdiger",
-        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
-        "position": 2
-    },
-    {
-        "id": "3",
-        "full_name": "Leonard Demes",
-        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
-        "position": 2
-    },
-    {
-        "id": "4",
-        "full_name": "Bastian Gödde",
-        "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocL_whTcuKvtmPGW_P-z9_wNWgGuoOrft4jVxTE4CPeI=s96-c",
-        "position": 2
-    }
-]);
-
 let selectedPlayer = ref(null);
+
+loading.value = false;
 
 const sortableTable = ref<HTMLElement | null>(null);
 useSortable(sortableTable, props.modelValue, {

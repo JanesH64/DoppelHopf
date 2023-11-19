@@ -58,14 +58,11 @@ function getLink(game: any) {
 }
 
 async function deleteGame(id: string) {
-    const {error} = await useFetch(`/api/games/${id}`, {
+    loading.value = true;
+
+    await useFetch(`/api/games/${id}`, {
         method: 'DELETE',
     });
-
-    if(error) {
-        console.log(error);
-        return;
-    }
 
     await loadGames();
 }

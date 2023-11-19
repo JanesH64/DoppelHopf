@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
             if(!id) {
                 return {status: 400};
             }
-
             await deleteGame(id, user.user.id);
             return {status: 200};
         }
@@ -77,15 +76,18 @@ async function updateGame(id: string, round: Round) {
 }
 
 async function deleteGame(id: string, userId: string) {
-    const result = await prisma.playersOnGames.delete({
+    await prisma.round.deleteMany({
         where: {
-            profile_id_game_id: {
-                game_id: id,
-                profile_id: userId
-            }
+            game_id: id
         }
     });
 
+    await prisma.playersOnGames.deleteMany({
+        where: {
+            game_id: id,
+        }
+    });
+    
     await prisma.game.delete(
         {
             where: {

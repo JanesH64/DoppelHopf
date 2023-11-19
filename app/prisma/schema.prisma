@@ -33,7 +33,7 @@ model PlayersOnGames {
   game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
   game_id String @db.Uuid
 
-  @@id([profile_id, game_id])
+  @@id([profile_id, game_id]) 
 }
 
 model Round {
