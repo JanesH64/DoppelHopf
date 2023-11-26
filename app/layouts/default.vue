@@ -1,6 +1,6 @@
 <template>
     <VitePwaManifest />
-    <div class="h-full">
+    <!-- <div class="h-full">
         <div class="drawer">
             <input id="main-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content">
@@ -33,17 +33,34 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div> -->
+    <v-app>
+        <v-layout>
+            <v-app-bar :elevation="2" class="pt-safe-top fixed top-0">
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer" variant="text"></v-app-bar-nav-icon>
+                <v-toolbar-title>
+                    <NuxtLink to="/">
+                        <v-btn variant="plain">
+                            Doppelhopf
+                        </v-btn>
+                    </NuxtLink>
+                </v-toolbar-title>
+                <template v-slot:append>
+                    <v-btn icon="mdi-account" to="/profile" nuxt></v-btn>
+                </template>
+            </v-app-bar>
+            <v-navigation-drawer v-model="drawer" location="left" temporary></v-navigation-drawer>
+            <v-main class="h-full mt-16 ml-4 mr-4 pt-safe-top">
+                <slot />
+            </v-main>
+        </v-layout>
+    </v-app>
 </template>
 
 
 <script setup lang="ts">
-const closeSidebar = () => {
-    const sidebar = document.getElementById('main-drawer') as HTMLInputElement;
-    if (sidebar) {
-        sidebar.checked = false;
-    }
-}
+let drawer = ref(false);
+
 useHead({
     link: [
         {
@@ -113,3 +130,36 @@ useHead({
     ],
 });
 </script>
+
+<!-- <script>
+  export default {
+    data: () => ({
+      drawer: false,
+      group: null,
+      items: [
+        {
+          title: 'Foo',
+          value: 'foo',
+        },
+        {
+          title: 'Bar',
+          value: 'bar',
+        },
+        {
+          title: 'Fizz',
+          value: 'fizz',
+        },
+        {
+          title: 'Buzz',
+          value: 'buzz',
+        },
+      ],
+    }),
+
+    watch: {
+      group () {
+        this.drawer = false
+      },
+    },
+  }
+</script> -->

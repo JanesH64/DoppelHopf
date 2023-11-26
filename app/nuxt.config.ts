@@ -1,3 +1,5 @@
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
@@ -6,6 +8,12 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-mdi',
     '@vueuse/nuxt',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
   ],
   supabase: {
     redirectOptions: {
@@ -65,6 +73,16 @@ export default defineNuxtConfig({
       suppressWarnings: true,
       navigateFallbackAllowlist: [/^\/$/],
       type: 'module',
+    },
+  },
+  build: {
+    transpile: ['vuetify'],
+  },
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
     },
   },
 })

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <VitePwaManifest />
     <div class="h-full">
         <div class="pt-safe-top h-full mt-16 ml-4 mr-4">
@@ -77,4 +77,4 @@ useHead({
         },
     ],
 });
-</script>
+</script> -->

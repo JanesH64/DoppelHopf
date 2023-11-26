@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="hero h-full flex items-start justify-center pt-24">
         <div class="hero-content text-center">
             <div class="flex flex-col items-center">
@@ -29,4 +29,8 @@
 const router = useRouter();
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
-</script>
+</script> -->
+
+<template>
+    <h1>Vuetify</h1>
+</template>
