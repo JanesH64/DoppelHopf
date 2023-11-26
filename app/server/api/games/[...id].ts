@@ -32,28 +32,30 @@ export default defineEventHandler(async (event) => {
 })
 
 async function getGame(id: string, userId: string) {
-    const game = await prisma.game.findFirst({
-        where: {
-            id: id,
-            players: {
-                some: {
-                    profile_id: userId
+    console.log(id);
+    const game = await prisma.game.findFirst(
+        {
+            where: {
+                id: id,
+                players: {
+                    some: {
+                        profile_id: userId
+                    }
                 }
-            }
-        },
-        include: {
-            players: {
-                include: {
-                    profile: true
+            },
+            include: {
+                players: {
+                    include: {
+                        profile: true
+                    }
                 }
             }
         }
-    });
+    );
 
     if(!game) {
         return {status: 404};
     }
-
     return game;
 }
 
